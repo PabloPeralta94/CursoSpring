@@ -1,4 +1,4 @@
-package curso.spring.model;
+package curso.spring.empleos.model;
 
 import java.util.Date;
 
