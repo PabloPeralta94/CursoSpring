@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import curso.spring.empleos.model.Vacante;
+import curso.spring.empleos.service.ICategoriasService;
 import curso.spring.empleos.service.IVacantesService;
 
 @Controller
