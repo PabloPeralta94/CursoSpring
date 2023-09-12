@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import curso.spring.jpademo.model.Categoria;
 import curso.spring.jpademo.repository.CategoriasRepository;
@@ -23,7 +26,58 @@ public class JpaDemoApplication implements CommandLineRunner{
 	}
 
 	public void run(String... args) throws Exception {
-		guardarTodas();
+		buscarTodosPaginacionOrdenados();
+	}
+	
+	/**
+	 * Metodo findAll [Con paginacion y Ordenados] - Interfaz PagingAndSortingRepository
+	 */
+	private void buscarTodosPaginacionOrdenados() {
+		Page<Categoria> page = repo.findAll(PageRequest.of(0, 5,Sort.by("nombre").descending()));
+		System.out.println("Total Registros: " + page.getTotalElements());
+		System.out.println("Total Paginas: " + page.getTotalPages());
+		for (Categoria c : page.getContent()) {
+			System.out.println(c.getId() + " " + c.getNombre());
+		}
+	}
+	
+	/**
+	 * Metodo findAll [Con Paginación] - Interfaz PagingAndSortingRepository
+	 */
+	private void buscarTodosPaginacion() {
+		Page<Categoria> page = repo.findAll(PageRequest.of(0, 5));
+		System.out.println("Total Registros: " + page.getTotalElements());
+		System.out.println("Total Paginas: " + page.getTotalPages());
+		for (Categoria c : page.getContent()) {
+			System.out.println(c.getId() + " " + c.getNombre());
+		}
+	}
+	
+	/**
+	 * Metodo findAll [Ordenados por un campo] - Interfaz PagingAndSortingRepository
+	 */
+	private void buscarTodosOrdenados() {
+		List<Categoria> categorias = repo.findAll(Sort.by("nombre").descending());
+		for (Categoria c : categorias) {
+			System.out.println(c.getId() + " " + c.getNombre());
+		}
+	}
+	
+	/**
+	 * Metodo deleteAllInBatch [Usar con precaución] - Interfaz JpaRepository 
+	 */
+	private void borrarTodoEnBloque() {
+		repo.deleteAllInBatch(); 
+	}
+	
+	/**
+	 * Metodo findAll - Interfaz JpaRepository
+	 */
+	private void buscarTodosJpa() {
+		List<Categoria> categorias = repo.findAll();
+		for (Categoria c : categorias) {
+			System.out.println(c.getId() + " " + c.getNombre());
+		}
 	}
 	
 	/**
