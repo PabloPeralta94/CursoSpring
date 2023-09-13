@@ -14,8 +14,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import curso.spring.jpademo.model.Categoria;
+import curso.spring.jpademo.model.Perfil;
+import curso.spring.jpademo.model.Usuario;
 import curso.spring.jpademo.model.Vacante;
 import curso.spring.jpademo.repository.CategoriasRepository;
+import curso.spring.jpademo.repository.PerfilesRepository;
+import curso.spring.jpademo.repository.UsuariosRepository;
 import curso.spring.jpademo.repository.VacantesRepository;
 
 @SpringBootApplication
@@ -38,7 +42,52 @@ public class JpaDemoApplication implements CommandLineRunner{
 	}
 
 	public void run(String... args) throws Exception {
-		buscarUsuario();
+		buscarVacantesVariosEstatus();
+	}
+	
+	/**
+	 * Query Method: Buscar Vacantes por varios Estatus (In)
+	 */
+	private void buscarVacantesVariosEstatus() {
+		String[] estatus = new String[] {"Eliminada", "Aprobada"};
+		List<Vacante> lista = repoVacantes.findByEstatusIn(estatus);
+		System.out.println("Registros encontrados: " + lista.size());
+		for (Vacante v : lista) {
+			System.out.println(v.getId() + ": " + v.getNombre() + ": " + v.getEstatus());
+		}
+	}
+	
+	/**
+	 * Query Method: Buscar Vacantes rango de Salario (Between)
+	 */
+	private void buscarVacantesSalario() {
+		List<Vacante> lista = repoVacantes.findBySalarioBetweenOrderBySalarioDesc(7000, 14000);
+		System.out.println("Registros encontrados: " + lista.size());
+		for (Vacante v : lista) {
+			System.out.println(v.getId() + ": " + v.getNombre() + ": $" + v.getSalario());
+		}
+	}
+	
+	/**
+	 * Query Method: Buscar Vacantes por Destacado y Estatus Ordenado por Id Desc
+	 */
+	private void buscarVacantesPorDestacadoEstatus() {
+		List<Vacante> lista = repoVacantes.findByDestacadoAndEstatusOrderByIdDesc(1, "Aprobada");
+		System.out.println("Registros encontrados: " + lista.size());
+		for (Vacante v : lista) {
+			System.out.println(v.getId() + ": " + v.getNombre() + ": " + v.getEstatus() + ":" + v.getDestacado());
+		}
+	}
+	
+	/**
+	 * Query Method: Buscar Vacantes por Estatus
+	 */
+	private void buscarVacantesPorEstatus() {
+		List<Vacante> lista = repoVacantes.findByEstatus("Eliminada");
+		System.out.println("Registros encontrados: " + lista.size());
+		for (Vacante v : lista) {
+			System.out.println(v.getId() + ": " + v.getNombre() + ": " + v.getEstatus());
+		}
 	}
 	
 	/**
