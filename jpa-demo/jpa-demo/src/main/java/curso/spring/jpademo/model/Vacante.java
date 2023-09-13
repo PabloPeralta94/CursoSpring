@@ -2,8 +2,21 @@ package curso.spring.jpademo.model;
 
 import java.util.Date;
 
+import org.springframework.data.annotation.Id;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name="Vacantes")
 public class Vacante {
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private String nombre;
 	private String descripcion;
@@ -13,6 +26,9 @@ public class Vacante {
 	private String imagen="no-image.png";
 	private String estatus;
 	private String detalles;
+	//@Transient
+	@OneToOne
+	@JoinColumn(name="idCategoria")
 	private Categoria categoria;
 
 	public Integer getId() {
