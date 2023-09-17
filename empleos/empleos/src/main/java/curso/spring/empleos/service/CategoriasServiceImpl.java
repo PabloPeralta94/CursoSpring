@@ -2,10 +2,12 @@ package curso.spring.empleos.service;
 
 import java.util.LinkedList;
 import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import curso.spring.empleos.model.Categoria;
+
 
 @Service
 public class CategoriasServiceImpl implements ICategoriasService{
@@ -48,12 +50,6 @@ public class CategoriasServiceImpl implements ICategoriasService{
 		cat5.setNombre("Educacion");
 		cat5.setDescripcion("Maestros, tutores, etc");
 		
-		// Categoria 6
-		Categoria cat6 = new Categoria();
-		cat6.setId(6);
-		cat6.setNombre("Desarrollo de software");
-		cat6.setDescripcion("Trabajo para programadores");
-		
 		/**
 		 * Agregamos los 5 objetos de tipo Categoria a la lista ...
 		 */
@@ -62,7 +58,6 @@ public class CategoriasServiceImpl implements ICategoriasService{
 		lista.add(cat3);
 		lista.add(cat4);
 		lista.add(cat5);
-		lista.add(cat6);
 
 	}
 	
@@ -81,6 +76,17 @@ public class CategoriasServiceImpl implements ICategoriasService{
 			}
 		}		
 		return null;	
+	}
+
+	@Override
+	public void eliminar(Integer idCategoria) {
+		// TODO Auto-generated method stub		
+	}
+
+	@Override
+	public Page<Categoria> buscarTodas(Pageable page) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

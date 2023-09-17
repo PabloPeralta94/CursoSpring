@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -39,15 +41,34 @@ public class DatabaseWebSecurity {
 		.requestMatchers("/bootstrap/**", "/images/**", "/tinymce/**", "/logos/**").permitAll()
 
 		// Las vistas públicas no requieren autenticación
-		.requestMatchers("/", "/signup", "/search", "/vacantes/view/**").permitAll()
+		.requestMatchers("/", "/login", "/signup", "/search", "/bcrypt/**", "/about", "/vacantes/view/**").permitAll()
+
+		// Asignar permisos a URLs por ROLES
+		.requestMatchers("/solicitudes/create/**", "/solicitudes/save/**").hasAuthority("USUARIO")
+		.requestMatchers("/solicitudes/**").hasAnyAuthority("SUPERVISOR", "ADMINISTRADOR")
+		.requestMatchers("/vacantes/**").hasAnyAuthority("SUPERVISOR", "ADMINISTRADOR")
+		.requestMatchers("/categorias/**").hasAnyAuthority("SUPERVISOR", "ADMINISTRADOR")
+		.requestMatchers("/usuarios/**").hasAnyAuthority("ADMINISTRADOR")
 
 		// Todas las demás URLs de la Aplicación requieren autenticación
 		.anyRequest().authenticated()
 
 		// El formulario de Login no requiere autenticacion
-		.and().formLogin().permitAll();
+		.and().formLogin().loginPage("/login").permitAll().and().logout().permitAll();
 
 		return http.build();
+	}
+
+	
+	/**
+	 * Implementación de Spring Security que encripta passwords con el algoritmo
+	 * Bcrypt
+	 * 
+	 * @return
+	 */
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 
 }
